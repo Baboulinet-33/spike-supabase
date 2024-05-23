@@ -6,7 +6,7 @@ metadata:
     {{- include "..labels-cnpg" . | nindent 4 }}
 spec:
   startDelay: 300
-  instances: 3
+  instances: 1
 
   storage:
     size: 8Gi
