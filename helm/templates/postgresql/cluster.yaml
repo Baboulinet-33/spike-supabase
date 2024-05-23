@@ -1,0 +1,51 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.cloudpgnative.fullname }}
+  labels:
+    {{- include "..labels-cnpg" . | nindent 4 }}
+spec:
+  startDelay: 300
+  instances: 3
+
+  storage:
+    size: 8Gi
+  {{- if .Values.cloudpgnative.resources }}
+  resources:
+    {{- .Values.cloudpgnative.resources | toYaml | nindent 4 }}
+  {{- end }}
+  bootstrap:
+    initdb:
+      database: {{ .Values.cloudpgnative.initdb.database }}
+      owner: {{ .Values.cloudpgnative.initdb.username }}
+      secret:
+        name: cnpg-supabase
+
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: cnpg-superuser
+
+  {{- if .Values.cloudpgnative.dump.enabled }}
+  backup:
+    barmanObjectStore:
+      destinationPath: {{ .Values.cloudpgnative.dump.destinationPath | quote }}
+      endpointURL: {{ .Values.cloudpgnative.dump.endpointURL | quote }}
+      s3Credentials:
+        accessKeyId:
+          name: {{ .Values.cloudpgnative.dump.awsCredentialsSecret | quote }}
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: {{ .Values.cloudpgnative.dump.awsCredentialsSecret | quote }}
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+        maxParallel: 8
+      data:
+        compression: gzip
+        immediateCheckpoint: false
+        jobs: 2
+    retentionPolicy: {{ .Values.cloudpgnative.dump.retentionPolicy | quote }}
+  {{- end }}
+    
+  monitoring:
+    enablePodMonitor: true

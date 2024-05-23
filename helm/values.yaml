@@ -1,0 +1,33 @@
+environment: ovh
+phase: dev
+
+cloudpgnative:
+  fullname: cnpg
+  initdb:
+    username: "supabase"
+    database: "demo"
+  auth:
+    existingSecret: cnpg
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  dump:
+    enabled: false
+
+supabase:
+  postgresql:
+    enabled: false
+  externalDatabase:
+    host: cnpg-rw
+    database: supabase
+    port: 5432
+    existingSecret: cnpg-supabase
+    existingSecretPasswordKey: password
+  studio:
+    ingress:
+      enabled: true
+      hostname: supabase-studio.spike-supabase.dev.numerique-interieur.com

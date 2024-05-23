@@ -1,0 +1,6 @@
+dependencies:
+- name: supabase
+  repository: https://charts.bitnami.com/bitnami
+  version: 5.1.1
+digest: sha256:8d1223f9e7c44d636c6a3921933fb06122f9d7f533964149fabbcd8fe59cfa57
+generated: "2024-05-23T09:24:09.01041589+02:00"
