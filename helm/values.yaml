@@ -21,6 +21,8 @@ cloudpgnative:
 supabase:
   kong:
     enabled: false
+  realtime:
+    enabled: false
   postgresql:
     enabled: false
   externalDatabase:
